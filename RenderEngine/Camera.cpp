@@ -2,8 +2,8 @@
 
 Camera::Camera()
 :_position(glm::vec3(0, 0, -50))
-,_lookPosition(glm::vec3(0, 0, 0))
-,_frustum(glm::perspective(glm::radians(90.0f), 4.0f/3.0f, 0.1f, 100.0f))
+,_lookPosition(glm::vec3(0, 0, -60))
+,_frustum(glm::perspective(glm::radians(90.0f), 4.0f/3.0f, 0.1f, 1000.0f))
 ,_view(glm::lookAt(_position, _lookPosition, glm::vec3(0, 1, 0)))
 {}
 
@@ -19,6 +19,13 @@ void Camera::setPosition(glm::vec3 position)
 void Camera::setLookPosition(glm::vec3 position)
 {
     _lookPosition = position;
+    updateViewMatrix();
+}
+
+void Camera::setMatrix(glm::vec3 position, glm::vec3 target)
+{
+    _position = position;
+    _lookPosition = target;
     updateViewMatrix();
 }
 

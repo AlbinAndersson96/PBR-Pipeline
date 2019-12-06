@@ -5,7 +5,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <GLFW/glfw3.h>
 
 class Camera
 {
@@ -15,6 +14,7 @@ class Camera
 
         void setPosition(glm::vec3);
         void setLookPosition(glm::vec3);
+        void setMatrix(glm::vec3, glm::vec3);
         void orbit(float, float);
 
         glm::vec3 _position;

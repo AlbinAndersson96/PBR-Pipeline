@@ -2,35 +2,40 @@
 
 ModelRenderer::ModelRenderer()
 {
-    _pbrShader = new PBRShader();
 }
 
 ModelRenderer::~ModelRenderer()
 {
-    delete _pbrShader;
 }
 
-void ModelRenderer::render(Camera *camera, Renderable object)
+void ModelRenderer::render(Camera *camera, Renderable object, PointLight *pointLights, int nrOfLights, Cubemap cubemap)
 { 
     glEnable(GL_DEPTH_TEST);
-
-    _pbrShader->use(camera->_view, camera->_frustum, camera->_position);
-
+    
     glBindVertexArray(object._VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, object._VBO);
-    glVertexAttribPointer(glGetAttribLocation(_pbrShader->_program, "in_Position"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(glGetAttribLocation(_pbrShader->_program, "in_Position"));
+    object._material._pbrShader->use();
 
-    glBindBuffer(GL_ARRAY_BUFFER, object._NBO);
-    glVertexAttribPointer(glGetAttribLocation(_pbrShader->_program, "in_Normal"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(glGetAttribLocation(_pbrShader->_program, "in_Normal"));
+    object._material._pbrShader->setMat4Uniform("viewMatrix", camera->_view);
+    object._material._pbrShader->setMat4Uniform("projectionMatrix", camera->_frustum);
 
-    glBindBuffer(GL_ARRAY_BUFFER, object._TBO);
-    glVertexAttribPointer(glGetAttribLocation(_pbrShader->_program, "in_TexCoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(glGetAttribLocation(_pbrShader->_program, "in_TexCoord"));
+    object._material._pbrShader->setVec3Uniform("cameraPos", camera->_position, 1);
+    object._material._pbrShader->setVec3Uniform("lightPositions", *(&pointLights[0]._position), nrOfLights);
+    object._material._pbrShader->setVec3Uniform("lightColors", *(&pointLights[0]._color), nrOfLights);
 
-    glBindTexture(GL_TEXTURE_2D, object._material.textureID);
+    object._material.loadTextures();
+
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap._convolutedTexture);
+    object._material._pbrShader->setIntUniform("irradianceMap", 4);
+
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap._mipmapTexture);
+    object._material._pbrShader->setIntUniform("prefilterMap", 5);
+
+    glActiveTexture(GL_TEXTURE6);
+    glBindTexture(GL_TEXTURE_2D, cubemap._brdfConvolutedTexture);
+    object._material._pbrShader->setIntUniform("brdfLUT", 6);
 
     glDrawElements(GL_TRIANGLES, object._model->numIndices, GL_UNSIGNED_INT, 0L);
 }

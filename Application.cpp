@@ -23,11 +23,20 @@ Application::~Application()
     glfwTerminate();
 }
 
+int activeSkybox = 0;
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if(key == GLFW_KEY_ESCAPE)
     {
         glfwSetWindowShouldClose(window, true);
+    }
+    else if(key == GLFW_KEY_0 && action == GLFW_PRESS)
+    {
+        activeSkybox = 0;
+    }
+    else if(key == GLFW_KEY_1 && action == GLFW_PRESS)
+    {
+        activeSkybox = 1;
     }
 }
 
@@ -64,11 +73,27 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 
 void Application::run()
 {
-    Material material("Resources/Textures/grass.tga");
-    Tag tag = Mesh;
-    Renderable object("Resources/Models/sphere.obj", material, tag);
+    /*PBRMaterial material("Resources/Textures/grimy-metal-albedo.tga", 
+                         "Resources/Textures/grimy-metal-normal-dx.tga",
+                         "Resources/Textures/grimy-metal-metalness.tga",
+                         "Resources/Textures/grimy-metal-roughness.tga");*/
+                         
+    PBRMaterial material("Resources/Cerberus/Textures/Cerberus_A.tga",
+                         "Resources/Cerberus/Textures/Cerberus_N.tga",
+                         "Resources/Cerberus/Textures/Cerberus_M.tga",
+                         "Resources/Cerberus/Textures/Cerberus_R.tga");
 
-    _masterRenderer = new MasterRenderer(&_mainCamera);
+    Cubemap cubeMap0("Resources/Textures/Tokyo_BigSight_3k.hdr");
+    Cubemap cubeMap1("Resources/Textures/Frozen_Waterfall_Ref.hdr");
+
+    Tag tag = Mesh;
+    //Renderable object("Resources/Models/sphere.obj", material, tag);
+    Renderable object("Resources/Cerberus/Cerberus_LP.obj", material, tag);
+
+    //PointLight pLight1(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(2000.0f, 2000.0f, 2000.0f));
+    PointLight pointLights[0] = {};
+
+    _masterRenderer = new MasterRenderer(&_mainCamera, pointLights, 1);
 
     glfwSetKeyCallback(_window, keyCallback);
     glfwSetCursorPosCallback(_window, cursorMoveCallback);
@@ -79,26 +104,33 @@ void Application::run()
     int nbFrames = 0;
     while(!glfwWindowShouldClose(_window))
     {   
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        if((lastMouseX != mouseX || lastMouseY != mouseY) && mouseIsDown)
+        if(glfwGetTime() - lastTime > 0.0166)
         {
-            _mainCamera.orbit((lastMouseX - mouseX)*orbitSpeed/WINDOW_WIDTH, (mouseY - lastMouseY)*orbitSpeed/WINDOW_HEIGHT);
-            lastMouseY = mouseY;
-            lastMouseX = mouseX;
-        }
+            lastTime = glfwGetTime();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        _masterRenderer->render(object);
+            if((lastMouseX != mouseX || lastMouseY != mouseY) && mouseIsDown)
+            {
+                _mainCamera.orbit((lastMouseX - mouseX)*orbitSpeed/WINDOW_WIDTH, (mouseY - lastMouseY)*orbitSpeed/WINDOW_HEIGHT);
+                lastMouseY = mouseY;
+                lastMouseX = mouseX;
+            }
 
-        glfwSwapBuffers(_window);
-        glfwPollEvents();
+            if(activeSkybox == 0)
+            {
+                _masterRenderer->renderCubemap(cubeMap0);
+                _masterRenderer->render(object, cubeMap0);
+            }
+            else if(activeSkybox == 1)
+            {
+                _masterRenderer->renderCubemap(cubeMap1);
+                _masterRenderer->render(object, cubeMap1);
+            }
+            
 
-        double currentTime = glfwGetTime();
-        nbFrames++;
-        if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1 sec ago
-            std::cout << "\r" << 1000.0/double(nbFrames) << " ms/frame.   " << 1000/(1000/double(nbFrames)) << " FPS " << std::flush;
-            nbFrames = 0;
-            lastTime += 1.0;
+
+            glfwSwapBuffers(_window);
+            glfwPollEvents();
         }
     }
     glfwTerminate();

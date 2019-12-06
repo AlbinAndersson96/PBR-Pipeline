@@ -1,10 +1,7 @@
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include "Material.h"
+#include "PBRMaterial.h"
 
 extern "C"
 {
@@ -20,12 +17,12 @@ enum Tag
 class Renderable
 {
     public:
-        Renderable(char*, Material, Tag);
+        Renderable(char*, PBRMaterial, Tag);
         ~Renderable();
 
 
         Model *_model;
-        Material _material;
+        PBRMaterial _material;
         Tag _tag;
 
         unsigned int _VAO;
