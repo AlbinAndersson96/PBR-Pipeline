@@ -14,28 +14,28 @@ void ModelRenderer::render(Camera *camera, Renderable object, PointLight *pointL
     
     glBindVertexArray(object._VAO);
 
-    object._material._pbrShader->use();
+    object._material._activeShader->use();
 
-    object._material._pbrShader->setMat4Uniform("viewMatrix", camera->_view);
-    object._material._pbrShader->setMat4Uniform("projectionMatrix", camera->_frustum);
+    object._material._activeShader->setMat4Uniform("viewMatrix", camera->_view);
+    object._material._activeShader->setMat4Uniform("projectionMatrix", camera->_frustum);
 
-    object._material._pbrShader->setVec3Uniform("cameraPos", camera->_position, 1);
-    object._material._pbrShader->setVec3Uniform("lightPositions", *(&pointLights[0]._position), nrOfLights);
-    object._material._pbrShader->setVec3Uniform("lightColors", *(&pointLights[0]._color), nrOfLights);
+    object._material._activeShader->setVec3Uniform("cameraPos", camera->_position, 1);
+    object._material._activeShader->setVec3Uniform("lightPositions", *(&pointLights[0]._position), nrOfLights);
+    object._material._activeShader->setVec3Uniform("lightColors", *(&pointLights[0]._color), nrOfLights);
 
     object._material.loadTextures();
 
     glActiveTexture(GL_TEXTURE4);
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap._convolutedTexture);
-    object._material._pbrShader->setIntUniform("irradianceMap", 4);
+    object._material._activeShader->setIntUniform("irradianceMap", 4);
 
     glActiveTexture(GL_TEXTURE5);
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap._mipmapTexture);
-    object._material._pbrShader->setIntUniform("prefilterMap", 5);
+    object._material._activeShader->setIntUniform("prefilterMap", 5);
 
     glActiveTexture(GL_TEXTURE6);
     glBindTexture(GL_TEXTURE_2D, cubemap._brdfConvolutedTexture);
-    object._material._pbrShader->setIntUniform("brdfLUT", 6);
+    object._material._activeShader->setIntUniform("brdfLUT", 6);
 
     glDrawElements(GL_TRIANGLES, object._model->numIndices, GL_UNSIGNED_INT, 0L);
 }

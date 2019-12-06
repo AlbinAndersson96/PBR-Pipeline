@@ -8,10 +8,13 @@
 class PBRMaterial
 {
     public:
-        PBRMaterial(char*, char*, char*, char*);
+        PBRMaterial(char*, char*, char*, char*, bool);
         ~PBRMaterial();
 
         Shader *_pbrShader;
+        Shader *_normalShader;
+
+        Shader *_activeShader;
 
         unsigned int albedoMapID;
         unsigned int normalMapID;
@@ -20,6 +23,7 @@ class PBRMaterial
         //unsigned int ambientOcclusionMapID;
 
         void loadTextures();
+        void SwapShader(bool);
 };
 
 #endif

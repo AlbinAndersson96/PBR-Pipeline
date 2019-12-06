@@ -12,22 +12,22 @@ Renderable::Renderable(char *modelPath, PBRMaterial material, Tag tag)
     glGenBuffers(1, &_VBO);
     glBindBuffer(GL_ARRAY_BUFFER, _VBO);
     glBufferData(GL_ARRAY_BUFFER, 3 * _model->numVertices * sizeof(GLfloat), _model->vertexArray, GL_STATIC_DRAW);
-    glVertexAttribPointer(glGetAttribLocation(material._pbrShader->_program, "in_Position"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(glGetAttribLocation(material._pbrShader->_program, "in_Position"));
+    glVertexAttribPointer(glGetAttribLocation(material._activeShader->_program, "in_Position"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(glGetAttribLocation(material._activeShader->_program, "in_Position"));
 
 
     glGenBuffers(1, &_NBO);
     glBindBuffer(GL_ARRAY_BUFFER, _NBO);
     glBufferData(GL_ARRAY_BUFFER, 3 * _model->numIndices * sizeof(GLfloat), _model->normalArray, GL_STATIC_DRAW);
-    glVertexAttribPointer(glGetAttribLocation(material._pbrShader->_program, "in_Normal"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(glGetAttribLocation(material._pbrShader->_program, "in_Normal"));
+    glVertexAttribPointer(glGetAttribLocation(material._activeShader->_program, "in_Normal"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(glGetAttribLocation(material._activeShader->_program, "in_Normal"));
 
 
     glGenBuffers(1, &_TBO);
     glBindBuffer(GL_ARRAY_BUFFER, _TBO);
     glBufferData(GL_ARRAY_BUFFER, 2 * _model->numIndices * sizeof(GLfloat), _model->texCoordArray, GL_STATIC_DRAW);
-    glVertexAttribPointer(glGetAttribLocation(material._pbrShader->_program, "in_TexCoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(glGetAttribLocation(material._pbrShader->_program, "in_TexCoord"));
+    glVertexAttribPointer(glGetAttribLocation(material._activeShader->_program, "in_TexCoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(glGetAttribLocation(material._activeShader->_program, "in_TexCoord"));
 
     glGenBuffers(1, &_IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _IBO);

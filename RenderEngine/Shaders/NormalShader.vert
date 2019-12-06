@@ -1,29 +1,20 @@
-#version 430
-
+#version 330 core
 in vec3 in_Position;
-in vec3 in_Normal;
 in vec2 in_TexCoord;
-
-uniform vec3 lightPos[4];
-uniform mat4 viewMatrix;
-uniform mat4 projectionMatrix;
-uniform sampler2D normalMap;
+in vec3 in_Normal;
 
 out vec2 texCoord;
 out vec3 position;
 out vec3 normal;
-out vec3 lightPositions[4];
+
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
 
 void main()
 {
-    gl_Position = projectionMatrix * viewMatrix * vec4(in_Position, 1.0);
-    position = in_Position;
     texCoord = in_TexCoord;
-    normal = in_Normal;//texture(normalMap, texCoord).rgb * 2.0 - 1.0 ;
+    position = vec3(vec4(in_Position, 1.0));
+    normal = in_Normal;   
 
-    for(int i = 0; i<4; i++)
-    {
-        //lightPositions[i] = vec3(viewMatrix) * lightPos[i];
-        lightPositions[i] = lightPos[i];
-    }
+    gl_Position =  projectionMatrix * viewMatrix * vec4(position, 1.0);
 }
