@@ -1,7 +1,7 @@
 #include "Cubemap.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../stb_image.h"
+#include "../Utilities/stb_image.h"
 
 void Cubemap::renderCube(Shader *shader)
 {
