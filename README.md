@@ -1,2 +1,2 @@
-# PBR-Pipeline
-An OpenGL PBR-pipeline for the course TSBK03
+# PBR-Renderer
+A PBR renderer written in C++ and OpenGL.
