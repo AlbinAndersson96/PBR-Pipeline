@@ -6,7 +6,7 @@ MasterRenderer::MasterRenderer(Camera *camera, PointLight *pointLights, int nrOf
 ,_nrOfLights(nrOfLights)
 {
     _modelRenderer = new ModelRenderer();
-    _skyboxShader = new Shader("RenderEngine/Shaders/SkyboxShader.vert", "RenderEngine/Shaders/SkyboxShader.frag");
+    _skyboxShader = new Shader("Shaders/SkyboxShader.vert", "Shaders/SkyboxShader.frag");
 }
 
 MasterRenderer::~MasterRenderer()

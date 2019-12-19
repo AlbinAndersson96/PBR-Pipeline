@@ -8,7 +8,7 @@
 
 #include "RenderEngine/Renderers/MasterRenderer.h"
 #include "RenderEngine/Renderable.h"
-#include "RenderEngine/PBRMaterial.h"
+#include "RenderEngine/Material.h"
 #include "RenderEngine/Camera.h"
 #include "RenderEngine/PointLight.h"
 #include "RenderEngine/Cubemap.h"

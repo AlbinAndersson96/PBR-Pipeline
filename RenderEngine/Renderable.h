@@ -1,7 +1,7 @@
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
-#include "PBRMaterial.h"
+#include "Material.h"
 
 extern "C"
 {
@@ -12,17 +12,18 @@ enum Tag
 {
     Mesh
     ,Cube
+    ,Skybox
 };
 
 class Renderable
 {
     public:
-        Renderable(char*, PBRMaterial, Tag);
+        Renderable(char*, Material, Tag);
         ~Renderable();
 
 
         Model *_model;
-        PBRMaterial _material;
+        Material _material;
         Tag _tag;
 
         unsigned int _VAO;

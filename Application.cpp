@@ -32,13 +32,16 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         glfwSetWindowShouldClose(window, true);
     }
     else if(key == GLFW_KEY_0 && action == GLFW_PRESS)
-    {
         activeSkybox = 0;
-    }
     else if(key == GLFW_KEY_1 && action == GLFW_PRESS)
-    {
         activeSkybox = 1;
-    }
+    else if(key == GLFW_KEY_2 && action == GLFW_PRESS)
+        activeSkybox = 2;
+    else if(key == GLFW_KEY_3 && action == GLFW_PRESS)
+        activeSkybox = 3;
+    else if(key == GLFW_KEY_4 && action == GLFW_PRESS)
+        activeSkybox = 4;
+
 
     if(key == GLFW_KEY_P && action == GLFW_PRESS)
         usePBR = !usePBR;
@@ -92,12 +95,12 @@ void MouseHandler(GLFWwindow *window, double mouseX, double mouseY)
 
 void Application::run()
 {
-    PBRMaterial material1("Resources/Cerberus/Textures/Cerberus_A.tga",
+    Material material1("Resources/Cerberus/Textures/Cerberus_A.tga",
                          "Resources/Cerberus/Textures/Cerberus_N.tga",
                          "Resources/Cerberus/Textures/Cerberus_M.tga",
                          "Resources/Cerberus/Textures/Cerberus_R.tga",
                          true);
-    PBRMaterial material2("Resources/Cerberus/Textures/Cerberus_A.tga",
+    Material material2("Resources/Cerberus/Textures/Cerberus_A.tga",
                          "Resources/Cerberus/Textures/Cerberus_N.tga",
                          "Resources/Cerberus/Textures/Cerberus_M.tga",
                          "Resources/Cerberus/Textures/Cerberus_R.tga",
@@ -105,12 +108,16 @@ void Application::run()
 
     Cubemap cubeMap0("Resources/Textures/Tokyo_BigSight_3k.hdr");
     Cubemap cubeMap1("Resources/Textures/Frozen_Waterfall_Ref.hdr");
+    Cubemap cubeMap2("Resources/Textures/Brooklyn_Bridge_Planks_2k.hdr");
+    Cubemap cubeMap3("Resources/Textures/Factory_Catwalk_2k.hdr");
+    Cubemap cubeMap4("Resources/Textures/Milkyway_small.hdr");
+
 
     Tag tag = Mesh;
     Renderable object1("Resources/Cerberus/Cerberus_LP.obj", material1, tag);
     Renderable object2("Resources/Cerberus/Cerberus_LP.obj", material2, tag);
 
-    PointLight pLight1(glm::vec3(-100.0f, 0.0f, 0.0f), glm::vec3(2000.0f, 2000.0f, 2000.0f));
+    PointLight pLight1(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(2000.0f, 2000.0f, 2000.0f));
     PointLight pointLights[1] = {pLight1};
 
     _masterRenderer = new MasterRenderer(&_mainCamera, pointLights, 1);
@@ -146,6 +153,30 @@ void Application::run()
                     _masterRenderer->render(object1, cubeMap1);
                 else
                     _masterRenderer->render(object2, cubeMap1);
+            }
+            else if(activeSkybox == 2)
+            {
+                _masterRenderer->renderCubemap(cubeMap2);
+                if(usePBR)
+                    _masterRenderer->render(object1, cubeMap2);
+                else
+                    _masterRenderer->render(object2, cubeMap2);
+            }
+            else if(activeSkybox == 3)
+            {
+                _masterRenderer->renderCubemap(cubeMap3);
+                if(usePBR)
+                    _masterRenderer->render(object1, cubeMap3);
+                else
+                    _masterRenderer->render(object2, cubeMap3);
+            }
+            else if(activeSkybox == 4)
+            {
+                _masterRenderer->renderCubemap(cubeMap4);
+                if(usePBR)
+                    _masterRenderer->render(object1, cubeMap4);
+                else
+                    _masterRenderer->render(object2, cubeMap4);
             }
             
             glfwSwapBuffers(_window);

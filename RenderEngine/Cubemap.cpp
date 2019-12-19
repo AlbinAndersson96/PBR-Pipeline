@@ -108,9 +108,9 @@ void Cubemap::renderQuad(Shader *shader)
 
 Cubemap::Cubemap(char *texturePath)
 {
-    _cubemapProgram = new Shader("RenderEngine/Shaders/CubemapShader.vert", "RenderEngine/Shaders/CubemapShader.frag");
-    _convolutionProgram = new Shader("RenderEngine/Shaders/CubemapShader.vert", "RenderEngine/Shaders/CubemapConvShader.frag");
-    _hammerslyProgram = new Shader("RenderEngine/Shaders/CubemapShader.vert", "RenderEngine/Shaders/HammerslyShader.frag");
+    _cubemapProgram = new Shader("Shaders/CubemapShader.vert", "Shaders/CubemapShader.frag");
+    _convolutionProgram = new Shader("Shaders/CubemapShader.vert", "Shaders/CubemapConvShader.frag");
+    _hammerslyProgram = new Shader("Shaders/CubemapShader.vert", "Shaders/HammerslyShader.frag");
 
     stbi_set_flip_vertically_on_load(true);
     int width, height, nrComponents;

@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include "Shaders/Shader.h"
+#include "../Shaders/Shader.h"
 
 #include "../Utilities/LoadTGA.h"
 

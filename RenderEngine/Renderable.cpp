@@ -1,6 +1,6 @@
 #include "Renderable.h"
 
-Renderable::Renderable(char *modelPath, PBRMaterial material, Tag tag)
+Renderable::Renderable(char *modelPath,  Material material, Tag tag)
 :_material(material)
 ,_tag(tag)
 {
