@@ -1,4 +1,5 @@
-#version 330 core
+#version 430
+
 in vec3 aPos;
 
 uniform mat4 projection;

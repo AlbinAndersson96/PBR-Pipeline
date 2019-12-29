@@ -1,4 +1,4 @@
-#version 330 core
+#version 430
 in vec3 in_Position;
 
 out vec3 position;

@@ -21,8 +21,7 @@ out vec4 out_Color;
 
 const float PI = 3.14159265359;
 
-// ----------------------------------------------------------------------------
-float DistributionGGX(vec3 N, vec3 H, float roughness)
+float TrowbridgeReitz(vec3 N, vec3 H, float roughness)
 {
     float a = roughness*roughness;
     float a2 = a*a;
@@ -35,8 +34,8 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 
     return nom / denom;
 }
-// ----------------------------------------------------------------------------
-float GeometrySchlickGGX(float NdotV, float roughness)
+
+float Schlick(float NdotV, float roughness)
 {
     float r = (roughness + 1.0);
     float k = (r*r) / 8.0;
@@ -46,17 +45,17 @@ float GeometrySchlickGGX(float NdotV, float roughness)
 
     return nom / denom;
 }
-// ----------------------------------------------------------------------------
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+
+float Smith(vec3 N, vec3 V, vec3 L, float roughness)
 {
     float NdotV = max(dot(N, V), 0.0);
     float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+    float ggx2 = Schlick(NdotV, roughness);
+    float ggx1 = Schlick(NdotL, roughness);
 
     return ggx1 * ggx2;
 }
-// ----------------------------------------------------------------------------
+
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
@@ -105,8 +104,8 @@ void main()
         float attenuation = 1.0 / (distance * distance);
         vec3 radiance = lightColors[i] * attenuation;
 
-        float NDF = DistributionGGX(N, H, roughness);   
-        float G   = GeometrySmith(N, V, L, roughness);    
+        float NDF = TrowbridgeReitz(N, H, roughness);   
+        float G   = Smith(N, V, L, roughness);    
         vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);        
         
         vec3 nominator    = NDF * G * F;
